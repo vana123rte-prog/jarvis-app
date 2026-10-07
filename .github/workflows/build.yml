@@ -18,12 +18,8 @@ jobs:
           wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip
           unzip -q gradle-8.5-bin.zip
           echo "$PWD/gradle-8.5/bin" >> $GITHUB_PATH
-      - name: Create Gradle files
-        run: |
-          echo "rootProject.name = 'Jarvis'" > settings.gradle
-          printf '%s\n' "buildscript {" "  repositories { google(); mavenCentral() }" "  dependencies { classpath 'com.android.tools.build:gradle:8.1.4' }" "}" "allprojects {" "  repositories { google(); mavenCentral() }" "}" > build.gradle
-          printf '%s\n' "apply plugin: 'com.android.application'" "android {" "  namespace 'com.jarvis.app'" "  compileSdk 34" "  defaultConfig {" "    applicationId 'com.jarvis.app'" "    minSdk 21" "    targetSdk 34" "    versionCode 1" "    versionName '1.0'" "  }" "  buildTypes { release { minifyEnabled false } }" "  compileOptions {" "    sourceCompatibility JavaVersion.VERSION_17" "    targetCompatibility JavaVersion.VERSION_17" "  }" "}" > app/build.gradle
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
+      - name: Write local.properties
+        run: echo "sdk.dir=$ANDROID_HOME" > local.properties
       - name: Build
         run: gradle assembleDebug
       - name: Upload APK
